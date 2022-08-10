@@ -1,0 +1,27 @@
+org: jerinpetergeorge
+app: sls-django-minimal
+service: sls-django-minimal-rest-api
+
+provider:
+  name: aws
+  runtime: python3.8
+
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
+
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
+
+custom:
+  pythonRequirements:
+    fileName: requirements.txt
+    usePipenv: false
+    dockerizePip: non-linux
+  wsgi:
+    app: sls_django_minimal.wsgi.application
+    packRequirements: false
